@@ -11,7 +11,9 @@ interface MenuItemProps {
 
 export default function MenuItem(props: MenuItemProps) {
     const router = useRouter()
-    const paginaSelecionada = router.pathname == props.url ? "bg-gray-100" : ""
+    const paginaSelecionada = router.pathname == props.url 
+        ? "bg-gray-100 dark:bg-gray-800"
+        : ""
 
     function renderizarItem() {
         return (
@@ -26,7 +28,9 @@ export default function MenuItem(props: MenuItemProps) {
 
     return (
         <li className={`
-            hover:bg-gray-100 px-1 cursor-pointer text-gray-600 
+            px-1 cursor-pointer 
+            hover:bg-gray-100 text-gray-600
+            dark:text-gray-200 dark:hover:bg-gray-700
             ${paginaSelecionada} ${props.className}
         `} onClick={props.onClick}>
             {props.url ? (
