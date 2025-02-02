@@ -12,7 +12,7 @@ interface MenuItemProps {
 export default function MenuItem(props: MenuItemProps) {
     const router = useRouter()
     const paginaSelecionada = router.pathname == props.url 
-        ? "bg-gray-100 dark:bg-gray-800"
+        ? "bg-gray-200 dark:bg-gray-800"
         : ""
 
     function renderizarItem() {
