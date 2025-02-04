@@ -41,7 +41,7 @@ export default function Autenticacao() {
             `}>
                 <Image
                     alt="imagem aleatória"
-                    src="/image2.jpg"
+                    src="/images/bgAuth.jpg"
                     fill
                     style={{ objectFit: "cover" }}
                     sizes="100%"
