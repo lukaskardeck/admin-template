@@ -1,9 +1,13 @@
 import AuthInput from "@/components/auth/AuthInput";
 import { IconeAtencao } from "@/components/icons";
+import useAuth from "@/data/hooks/useAuth";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function Autenticacao() {
+
+    const { usuario, loginGoogle } = useAuth()
+
     const [modo, setModo] = useState<"login" | "cadastro">("login")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
@@ -112,7 +116,7 @@ export default function Autenticacao() {
 
                     <hr className="my-4 border-gray-300 w-full" />
 
-                    <button onClick={submit()} className={`
+                    <button onClick={loginGoogle} className={`
                         w-full bg-red-600 hover:bg-red-500
                         text-white rounded-lg px-4 py-3
                     `}>
