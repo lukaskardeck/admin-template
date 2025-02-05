@@ -1,7 +1,7 @@
 import useAuth from "@/data/hooks/useAuth";
-import Head from "next/head";
 import Image from "next/image";
 import router from "next/router";
+import Script from "next/script";
 
 export default function ForcarAutenticacao(props) {
     const { usuario, carregando } = useAuth()
@@ -9,15 +9,13 @@ export default function ForcarAutenticacao(props) {
     function renderizarConteudo() {
         return (
             <>
-                <Head>
-                    <script dangerouslySetInnerHTML={{
-                        __html: `
-                            if (!document.cookie?.includes("admin-template-auth")) {
-                                window.location.href = "/autenticacao"
-                            }
-                        `
-                    }} />
-                </Head>
+                <Script id="redirect-script" dangerouslySetInnerHTML={{
+                    __html: `
+                        if (!document.cookie?.includes("admin-template-auth")) {
+                            window.location.href = "/autenticacao"
+                        }
+                    `
+                }} />
                 {props.children}
             </>
         )
@@ -32,6 +30,7 @@ export default function ForcarAutenticacao(props) {
                     width={100}
                     height={100}
                     priority
+                    unoptimized
                 />
             </div>
         )
