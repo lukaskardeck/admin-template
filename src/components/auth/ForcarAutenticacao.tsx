@@ -1,3 +1,4 @@
+import useAppData from "@/data/hooks/useAppData";
 import useAuth from "@/data/hooks/useAuth";
 import Image from "next/image";
 import router from "next/router";
@@ -5,6 +6,7 @@ import Script from "next/script";
 
 export default function ForcarAutenticacao(props) {
     const { usuario, carregando } = useAuth()
+    const { tema } = useAppData()
 
     function renderizarConteudo() {
         return (
@@ -23,15 +25,17 @@ export default function ForcarAutenticacao(props) {
 
     function renderizarCarregamento() {
         return (
-            <div className="flex h-screen justify-center items-center">
-                <Image
-                    src="/images/loading.gif"
-                    alt="gif de carregamento"
-                    width={100}
-                    height={100}
-                    priority
-                    unoptimized
-                />
+            <div className={`${tema} h-screen`}>
+                <div className="flex h-full justify-center items-center dark:bg-gray-800">
+                    <Image
+                        src="/images/loading.gif"
+                        alt="gif de carregamento"
+                        width={100}
+                        height={100}
+                        priority
+                        unoptimized
+                    />
+                </div>
             </div>
         )
     }
