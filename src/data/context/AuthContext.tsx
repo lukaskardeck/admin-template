@@ -8,6 +8,7 @@ import { FirebaseError } from "firebase/app"
 
 interface AuthContextProps {
     usuario?: Usuario
+    carregando?: boolean
     loginGoogle?: () => Promise<void>
     logout?: () => Promise<void>
 }
@@ -89,6 +90,8 @@ export function AuthProvider(props: any) {
         if (getCookie("admin-template-auth")){
             const cancelar = auth.onIdTokenChanged(configurarSessao)
             return () => cancelar()
+        } else {
+            setCarregando(false)
         }
     }, [])
 
@@ -106,6 +109,7 @@ export function AuthProvider(props: any) {
     return (
         <AuthContext.Provider value={{
             usuario,
+            carregando,
             loginGoogle,
             logout
         }}>
