@@ -1,35 +1,79 @@
 import AuthInput from "@/components/auth/AuthInput";
 import { IconeAtencao } from "@/components/icons";
 import useAuth from "@/data/hooks/useAuth";
+import { FirebaseError } from "firebase/app";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function Autenticacao() {
 
-    const { usuario, loginGoogle } = useAuth()
+    const {
+        login,
+        cadastrar,
+        loginGoogle 
+    } = useAuth()
 
     const [modo, setModo] = useState<"login" | "cadastro">("login")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
-    const [confirmarSenha, setConfirmarSenha] = useState("")
+    // const [confirmarSenha, setConfirmarSenha] = useState("")
     const [erro, setErro] = useState("")
 
-    function submit() {
-        if (modo === "login") {
-            console.log("login")
-        } else {
-            console.log("cadastrar")
+    async function submit() {
+        try {
+            if (modo === "login") {
+                await login(email, senha)
+            } else {
+                await cadastrar(email, senha)
+            }
+        } catch (erro) {
+            if (erro instanceof FirebaseError) {
+                let mensagemErro = "Ocorreu um erro inesperado."
+    
+                switch (erro.code) {
+                    case "auth/invalid-credential":
+                        mensagemErro = "E-mail ou senha incorretos. Verifique e tente novamente."
+                        break
+                    case "auth/invalid-email":
+                        mensagemErro = "O e-mail informado não é válido."
+                        break
+                    case "auth/user-not-found":
+                        mensagemErro = "Nenhuma conta encontrada com esse e-mail."
+                        break
+                    case "auth/wrong-password":
+                        mensagemErro = "Senha incorreta. Tente novamente."
+                        break
+                    case "auth/email-already-in-use":
+                        mensagemErro = "Este e-mail já está em uso por outra conta."
+                        break
+                    case "auth/too-many-requests":
+                        mensagemErro = "Muitas tentativas. Tente novamente mais tarde."
+                        break
+                    case "auth/network-request-failed":
+                        mensagemErro = "Verifique sua conexão com a internet."
+                        break
+                    default:
+                        mensagemErro = "Erro desconhecido: " + erro.message
+                }
+    
+                exibirMsgErro(mensagemErro)
+            } else {
+                console.error("Erro inesperado:", erro)
+                exibirMsgErro("Erro inesperado. Tente novamente.")
+            }
         }
     }
+    
+    
 
     function alternarModo() {
         setModo(modo === "login" ? "cadastro" : "login")
         setEmail("")
         setSenha("")
-        setConfirmarSenha("")
+        // setConfirmarSenha("")
     }
 
-    function exibirMsgErro(msg: string, tempoDuracaoSeg: number = 5) {
+    function exibirMsgErro(msg: string, tempoDuracaoSeg: number = 10) {
         setErro(msg)
         setTimeout(() => setErro(""), tempoDuracaoSeg * 1000);
     }
@@ -66,7 +110,7 @@ export default function Autenticacao() {
                 {erro && (
                     <div className={`
                         flex items-center
-                        py-3 px-5 gap-1 rounded-lg
+                        py-3 px-5 gap-3 rounded-lg
                         bg-red-400 text-white font-light 
                     `}>
                         {IconeAtencao}
@@ -91,7 +135,7 @@ export default function Autenticacao() {
                         required
                     />
 
-                    {modo === "cadastro" && (
+                    {/* {modo === "cadastro" && (
                         <AuthInput
                             tipo="password"
                             label="Confirmar Senha"
@@ -99,7 +143,7 @@ export default function Autenticacao() {
                             onChange={setConfirmarSenha}
                             required
                         />
-                    )}
+                    )} */}
                 </div>
 
                 <div>

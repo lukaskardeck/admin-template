@@ -1,19 +1,35 @@
 import Usuario from "@/models/Usuario"
 import app from "@/lib/firebase/config"
 import { setCookie, deleteCookie, getCookie } from "cookies-next"
-import { getAuth, signInWithPopup, User, GoogleAuthProvider } from "firebase/auth"
+import {
+    getAuth,
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    User, 
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword,
+} from "firebase/auth"
 import { useRouter } from "next/router"
 import { createContext, useEffect, useState } from "react"
 import { FirebaseError } from "firebase/app"
 
 interface AuthContextProps {
-    usuario?: Usuario
-    carregando?: boolean
-    loginGoogle?: () => Promise<void>
-    logout?: () => Promise<void>
+    usuario: Usuario
+    carregando: boolean
+    cadastrar: (email: string, senha: string) => Promise<void>
+    login: (email: string, senha: string) => Promise<void>
+    loginGoogle: () => Promise<void>
+    logout: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextProps>({})
+const AuthContext = createContext<AuthContextProps>({
+    usuario: {} as Usuario,
+    carregando: true,
+    cadastrar: async () => {},
+    login: async () => {},
+    loginGoogle: async () => {},
+    logout: async () => {}
+})
 
 async function usuarioNormalizado(usuarioFirebase: User): Promise<Usuario> {
     const token = await usuarioFirebase.getIdToken()
@@ -63,13 +79,35 @@ export function AuthProvider(props: any) {
         }
     }
 
+    async function cadastrar(email: string, senha: string) {
+        try {
+            setCarregando(true)
+            const resp = await createUserWithEmailAndPassword(auth, email, senha)
+            await configurarSessao(resp.user)
+            router.push("/")
+        } finally {
+            setCarregando(false)
+        }
+    }
+
+    async function login(email: string, senha: string) {
+        try {
+            setCarregando(true)
+            const resp = await signInWithEmailAndPassword(auth, email, senha)
+            await configurarSessao(resp.user)
+            router.push("/")
+        } finally {
+            setCarregando(false)
+        }
+    }
+
     async function loginGoogle() {
         const provider = new GoogleAuthProvider();
 
         try {
             setCarregando(true)
             const resp = await signInWithPopup(auth, provider);
-            configurarSessao(resp.user)
+            await configurarSessao(resp.user)
             router.push("/");
         } catch (error) {
             if (error instanceof FirebaseError) {
@@ -87,7 +125,7 @@ export function AuthProvider(props: any) {
     }
 
     useEffect(() => {
-        if (getCookie("admin-template-auth")){
+        if (getCookie("admin-template-auth")) {
             const cancelar = auth.onIdTokenChanged(configurarSessao)
             return () => cancelar()
         } else {
@@ -110,6 +148,8 @@ export function AuthProvider(props: any) {
         <AuthContext.Provider value={{
             usuario,
             carregando,
+            cadastrar,
+            login,
             loginGoogle,
             logout
         }}>
