@@ -17,10 +17,10 @@ export default function MenuItem(props: MenuItemProps) {
 
     function renderizarItem() {
         return (
-            <div className={`flex flex-col justify-center items-center h-20 w-full}`}>
+            <div className={`flex flex-col justify-center items-center h-16 w-full}`}>
                 {props.icone}
                 <span
-                    className="text-sm font-light"
+                    className="text-xs font-light"
                 >{props.texto}</span>
             </div>
         )

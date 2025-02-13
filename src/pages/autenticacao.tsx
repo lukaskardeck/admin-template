@@ -10,7 +10,7 @@ export default function Autenticacao() {
     const {
         login,
         cadastrar,
-        loginGoogle 
+        loginGoogle
     } = useAuth()
 
     const [modo, setModo] = useState<"login" | "cadastro">("login")
@@ -34,7 +34,7 @@ export default function Autenticacao() {
         } catch (erro) {
             if (erro instanceof FirebaseError) {
                 let mensagemErro = "Ocorreu um erro inesperado."
-    
+
                 switch (erro.code) {
                     case "auth/invalid-credential":
                         mensagemErro = "E-mail ou senha incorretos. Verifique e tente novamente."
@@ -60,7 +60,7 @@ export default function Autenticacao() {
                     default:
                         mensagemErro = "Erro desconhecido: " + erro.message
                 }
-    
+
                 exibirMsgErro(mensagemErro)
             } else {
                 console.error("Erro inesperado:", erro)
@@ -68,8 +68,8 @@ export default function Autenticacao() {
             }
         }
     }
-    
-    
+
+
 
     function alternarModo() {
         setModo(modo === "login" ? "cadastro" : "login")
@@ -85,23 +85,22 @@ export default function Autenticacao() {
     }
 
     return (
-        <div className={`flex h-screen items-center justify-center`}>
+        <div className={`flex h-screen items-center justify-center `}>
+
             <div className={`
-                hidden md:flex relative w-1/2 h-full xl:w-2/3
+                hidden sm:flex relative w-full h-full 
             `}>
                 <Image
                     alt="imagem aleatória"
-                    src="/images/bgAuth.jpg"
-                    fill
+                    src="/images/constellation.svg"
                     style={{ objectFit: "cover" }}
-                    sizes="100%"
+                    fill
                     priority
                 />
             </div>
 
-
             <div className={`
-               flex w-1/2 xl:w-1/3 flex-col gap-6 px-6
+               flex w-full flex-col gap-6 px-12 lg:px-24
             `}>
                 <h1 className={`
                      text-xl font-bold text-center

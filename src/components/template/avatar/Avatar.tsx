@@ -17,13 +17,13 @@ export default function Avatar() {
 
     // Fecha o menu ao clicar fora
     useEffect(() => {
-      function handleClickOutside(event: MouseEvent) {
-        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-          setMenuAberto(false);
+        function handleClickOutside(event: MouseEvent) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setMenuAberto(false);
+            }
         }
-      }
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     return (
@@ -47,7 +47,9 @@ export default function Avatar() {
             </div>
 
             <div className="flex items-center justify-center text-sm gap-1">
-                {usuario?.nome || "user"} 
+                <div className="hidden sm:flex">
+                    {usuario?.nome || "user"}
+                </div>
                 {IconeParaBaixo}
             </div>
 
@@ -55,20 +57,20 @@ export default function Avatar() {
                 <MenuPerfil>
                     <ItemMenuPerfil
                         texto="Meu Perfil"
-                        icon={IconePerfil(6)}
+                        icon={IconePerfil(5)}
                         onClick={() => console.log(usuario)}
                         url="/perfil"
                     />
 
                     <ItemMenuPerfil
                         texto={`Tema: ${palavraTema}`}
-                        icon={IconeSol(6)}
+                        icon={IconeSol(5)}
                         onClick={alternarTema}
                     />
 
                     <ItemMenuPerfil
                         texto="Sair"
-                        icon={IconeSair(6)}
+                        icon={IconeSair(5)}
                         onClick={logout}
                         className={`
                             text-red-600 hover:bg-red-500 hover:text-white
