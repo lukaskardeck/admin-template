@@ -14,6 +14,7 @@ export default function Autenticacao() {
     } = useAuth()
 
     const [modo, setModo] = useState<"login" | "cadastro">("login")
+    const [nome, setNome] = useState("");
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     // const [confirmarSenha, setConfirmarSenha] = useState("")
@@ -24,7 +25,11 @@ export default function Autenticacao() {
             if (modo === "login") {
                 await login(email, senha)
             } else {
-                await cadastrar(email, senha)
+                if (!nome.trim()) {
+                    exibirMsgErro("Campo 'Nome de usuário' está vazio!");
+                    return;
+                }
+                await cadastrar(nome, email, senha)
             }
         } catch (erro) {
             if (erro instanceof FirebaseError) {
@@ -68,6 +73,7 @@ export default function Autenticacao() {
 
     function alternarModo() {
         setModo(modo === "login" ? "cadastro" : "login")
+        setNome("")
         setEmail("")
         setSenha("")
         // setConfirmarSenha("")
@@ -119,6 +125,16 @@ export default function Autenticacao() {
                 )}
 
                 <div className="flex flex-col gap-3">
+                    {modo === "cadastro" && (
+                        <AuthInput
+                            tipo="text"
+                            label="Nome de Usuario"
+                            valor={nome}
+                            onChange={setNome}
+                            required
+                        />
+                    )}
+
                     <AuthInput
                         tipo="email"
                         label="Email"

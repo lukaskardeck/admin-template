@@ -8,6 +8,7 @@ import {
     User, 
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
+    updateProfile,
 } from "firebase/auth"
 import { useRouter } from "next/router"
 import { createContext, useEffect, useState } from "react"
@@ -16,7 +17,7 @@ import { FirebaseError } from "firebase/app"
 interface AuthContextProps {
     usuario: Usuario
     carregando: boolean
-    cadastrar: (email: string, senha: string) => Promise<void>
+    cadastrar: (nome: string, email: string, senha: string) => Promise<void>
     login: (email: string, senha: string) => Promise<void>
     loginGoogle: () => Promise<void>
     logout: () => Promise<void>
@@ -79,10 +80,13 @@ export function AuthProvider(props: any) {
         }
     }
 
-    async function cadastrar(email: string, senha: string) {
+    async function cadastrar(nome: string, email: string, senha: string) {
         try {
             setCarregando(true)
             const resp = await createUserWithEmailAndPassword(auth, email, senha)
+            await updateProfile(resp.user, {
+                displayName: nome
+            })
             await configurarSessao(resp.user)
             router.push("/")
         } finally {

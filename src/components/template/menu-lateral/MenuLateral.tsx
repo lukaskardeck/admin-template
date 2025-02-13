@@ -22,7 +22,7 @@ export default function MenuLateral() {
                 <MenuItem url="/ajustes" texto="Ajustes" icone={IconeAjuste} />
                 <MenuItem url="/notificacoes" texto="Notificações" icone={IconeSino} />
             </ul>
-            <ul>
+            {/* <ul>
                 <MenuItem 
                     texto="Sair" 
                     icone={IconeSair} 
@@ -32,7 +32,7 @@ export default function MenuLateral() {
                         dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-gray-200
                     `}
                 />
-            </ul>
+            </ul> */}
         </aside>
     )
 }
