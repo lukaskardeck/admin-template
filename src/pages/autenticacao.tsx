@@ -1,5 +1,5 @@
 import AuthInput from "@/components/auth/AuthInput";
-import { IconeAtencao } from "@/components/icons";
+import { IconeAtencao, IconeCadeado, IconeCasa, IconeEmail, IconeGoogle, IconePerfil } from "@/components/icons";
 import useAuth from "@/data/hooks/useAuth";
 import { FirebaseError } from "firebase/app";
 import Image from "next/image";
@@ -85,72 +85,83 @@ export default function Autenticacao() {
     }
 
     return (
-        <div className={`flex h-screen items-center justify-center `}>
+        <div className={`relative h-screen w-screen`}>
+            <Image
+                src="/images/constellation.svg"
+                alt=""
+                fill
+                style={{ objectFit: "cover" }}
+                className="z-0"
+                
+            />
 
             <div className={`
-                hidden sm:flex relative w-full h-full 
+                relative z-10 flex flex-col items-center justify-center h-full
             `}>
-                <Image
-                    alt="imagem aleatória"
-                    src="/images/constellation.svg"
-                    style={{ objectFit: "cover" }}
-                    fill
-                    priority
-                />
-            </div>
 
-            <div className={`
-               flex w-full flex-col gap-6 px-12 lg:px-24
-            `}>
-                <h1 className={`
-                     text-xl font-bold text-center
+                {/* CONTAINER TRANSPARENTE */}
+                <div className={`
+                    flex flex-col gap-8
+                    text-white bg-white/10 border border-white/30
+                    backdrop-blur-lg rounded-xl shadow-lg 
+                    w-[400px] md:w-[500px] p-8
                 `}>
-                    {
-                        modo === "login"
-                            ? "Entre com a Sua Conta"
-                            : "Cadastre-se na Plataforma"
-                    }
-                </h1>
 
-                {erro && (
-                    <div className={`
+                    {/* TÍTULO DA PÁGINA */}
+                    <h1 className={`
+                        text-xl font-bold text-center
+                    `}>
+                        {
+                            modo === "login"
+                                ? "Entre com a Sua Conta"
+                                : "Cadastre-se na Plataforma"
+                        }
+                    </h1>
+
+                    {/* MENSAGEM DE ERRO */}
+                    {erro && (
+                        <div className={`
                         flex items-center
                         py-3 px-5 gap-3 rounded-lg
                         bg-red-400 text-white font-light 
                     `}>
-                        {IconeAtencao}
-                        <span>{erro}</span>
-                    </div>
-                )}
-
-                <div className="flex flex-col gap-3">
-                    {modo === "cadastro" && (
-                        <AuthInput
-                            tipo="text"
-                            label="Nome de Usuario"
-                            valor={nome}
-                            onChange={setNome}
-                            required
-                        />
+                            {IconeAtencao}
+                            <span>{erro}</span>
+                        </div>
                     )}
 
-                    <AuthInput
-                        tipo="email"
-                        label="Email"
-                        valor={email}
-                        onChange={setEmail}
-                        required
-                    />
+                    {/* CAMPOS DE ENTRADA */}
+                    <div className="flex flex-col gap-3">
+                        {modo === "cadastro" && (
+                            <AuthInput
+                                tipo="text"
+                                label="Nome de Usuario"
+                                icon={IconePerfil(5)}
+                                valor={nome}
+                                onChange={setNome}
+                                required
+                            />
+                        )}
 
-                    <AuthInput
-                        tipo="password"
-                        label="Senha"
-                        valor={senha}
-                        onChange={setSenha}
-                        required
-                    />
+                        <AuthInput
+                            tipo="email"
+                            label="Email"
+                            icon={IconeEmail}
+                            valor={email}
+                            onChange={setEmail}
+                            required
+                        />
 
-                    {/* {modo === "cadastro" && (
+                        <AuthInput
+                            tipo="password"
+                            label="Senha"
+                            icon={IconeCadeado}
+                            valor={senha}
+                            onChange={setSenha}
+                            required
+                        />
+
+                        {/* {modo === "cadastro" && (
                         <AuthInput
                             tipo="password"
                             label="Confirmar Senha"
@@ -158,40 +169,43 @@ export default function Autenticacao() {
                             onChange={setConfirmarSenha}
                             required
                         />
-                    )} */}
-                </div>
+                        )} */}
+                    </div>
 
-                <div>
-                    <button onClick={submit} className={`
-                        w-full bg-indigo-500 hover:bg-indigo-400
-                        text-white rounded-lg px-4 py-3
-                    `}>
-                        {
-                            modo === "login"
-                                ? "Entrar"
-                                : "Cadastrar"
-                        }
-                    </button>
+                    {/* BOTÕES PARA LOGIN/CADASTRO */}
+                    <div>
+                        <button onClick={submit} className={`
+                            w-full bg-indigo-500 hover:bg-indigo-400
+                            text-white rounded-lg px-4 py-3
+                        `}>
+                            {modo === "login" ? "Entrar" : "Cadastrar"}
+                        </button>
 
-                    <hr className="my-4 border-gray-300 w-full" />
+                        <hr className="my-3 border-gray-300 w-full" />
 
-                    <button onClick={loginGoogle} className={`
-                        w-full bg-red-600 hover:bg-red-500
-                        text-white rounded-lg px-4 py-3
-                    `}>
-                        Entrar com Google
-                    </button>
-                </div>
+                        <button
+                            onClick={loginGoogle}
+                            className="flex items-center w-full bg-red-600 hover:bg-red-500 text-white rounded-lg px-4 py-3 relative"
+                        >
+                            <div className="absolute left-4 ">
+                                {IconeGoogle}
+                            </div>
 
-                <div>
-                    <p className="mt-2">
-                        {modo === "login" ? "Novo por aqui?" : "Já faz parte da comunidade?"}
-                        <span
-                            onClick={alternarModo}
-                            className="ml-2 cursor-pointer text-indigo-700">
-                            {modo === "login" ? "Crie uma conta gratuitamente!" : "Entre com as suas credenciais!"}
-                        </span>
-                    </p>
+                            <span className="w-full text-center">Entrar com Google</span>
+                        </button>
+
+                    </div>
+
+                    <div>
+                        <p className="mt-2">
+                            {modo === "login" ? "Novo por aqui?" : "Já faz parte da comunidade?"}
+                            <span
+                                onClick={alternarModo}
+                                className="ml-2 cursor-pointer text-indigo-300">
+                                {modo === "login" ? "Crie uma conta gratuitamente!" : "Entre com as suas credenciais!"}
+                            </span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

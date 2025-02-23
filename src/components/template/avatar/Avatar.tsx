@@ -39,7 +39,7 @@ export default function Avatar() {
             <div className="relative h-8 w-8">
                 <Image
                     alt="Avatar do usuário"
-                    src={usuario?.imagemUrl || "/images/avatar.svg"}
+                    src={usuario?.imagemUrl || "/images/av3.jpg"}
                     className="rounded-full"
                     fill
                     priority
